@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DharmaAI | Conscious Intelligence for Exponential Growth</title>
+  <!-- Tailwind + Font Awesome + Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <!-- Flatpickr for scheduling mock -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <style>
+    * { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+    body { background: #fbfefe; overflow-x: hidden; }
+    .glass-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); }
+    .gradient-text { background: linear-gradient(135deg, #1E3C72, #2A5298, #00B4AA); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .mascot-float { animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
+    .chat-bubble { transition: all 0.2s ease; }
+    .page-transition { animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .avatar-glow { box-shadow: 0 0 0 0 rgba(0,180,170,0.4); animation: pulse 2s infinite; border-radius: 2rem; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,180,170,0.5); } 70% { box-shadow: 0 0 0 12px rgba(0,180,170,0); } 100% { box-shadow: 0 0 0 0 rgba(0,180,170,0); } }
+    .active-nav { border-bottom: 3px solid #00B4AA; color: #0f2b3d; font-weight: 700; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eef2f5; }
+    ::-webkit-scrollbar-thumb { background: #2A5298; border-radius: 12px; }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100">
+    <div class="container mx-auto px-6 py-4 flex flex-wrap items-center justify-between">
+      <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTo('home')">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1E3C72] to-[#00B4AA] flex items-center justify-center shadow-md">
+          <i class="fas fa-brain text-white text-lg"></i>
+        </div>
+        <span class="font-extrabold text-2xl tracking-tight"><span class="gradient-text">Dharma</span><span class="text-gray-800">AI</span></span>
+      </div>
+      <nav class="hidden md:flex space-x-8 text-md font-medium">
+        <a href="#" data-page="home" class="nav-link hover:text-teal-600 transition">Home</a>
+        <a href="#" data-page="services" class="nav-link hover:text-teal-600 transition">Services</a>
+        <a href="#" data-page="case-studies" class="nav-link hover:text-teal-600 transition">Case Studies</a>
+        <a href="#" data-page="resource-hub" class="nav-link hover:text-teal-600 transition">AI Resource Hub</a>
+        <a href="#" data-page="contact" class="nav-link hover:text-teal-600 transition">Connect</a>
+      </nav>
+      <div class="flex items-center space-x-3">
+        <button id="scheduleBtnDesktop" class="hidden md:block bg-gradient-to-r from-[#1E3C72] to-[#2A5298] text-white px-5 py-2 rounded-full text-sm font-semibold shadow-md hover:shadow-xl transition flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Schedule AI Consult</button>
+        <button id="mobileMenuBtn" class="md:hidden text-2xl"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+    <!-- Mobile menu panel -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white/95 backdrop-blur-md px-6 pb-4 flex flex-col space-y-3 border-t border-gray-100">
+      <a href="#" data-page="home" class="nav-link-mobile py-2 text-gray-700 font-medium">Home</a>
+      <a href="#" data-page="services" class="nav-link-mobile py-2 text-gray-700 font-medium">Services</a>
+      <a href="#" data-page="case-studies" class="nav-link-mobile py-2 text-gray-700 font-medium">Case Studies</a>
+      <a href="#" data-page="resource-hub" class="nav-link-mobile py-2 text-gray-700 font-medium">AI Resource Hub</a>
+      <a href="#" data-page="contact" class="nav-link-mobile py-2 text-gray-700 font-medium">Connect</a>
+      <button id="scheduleBtnMobile" class="bg-gradient-to-r from-[#1E3C72] to-[#2A5298] text-white px-4 py-2 rounded-full text-sm font-semibold w-fit">Schedule AI Consult</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT (SPA PAGES) -->
+  <main id="appContent" class="container mx-auto px-6 py-8 md:py-12 min-h-[70vh] page-transition"></main>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white mt-20 py-8 border-t border-gray-800">
+    <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+      <div><i class="fas fa-dharmachakra text-teal-400 mr-2"></i> DharmaAI — Ethics-first AI ecosystem</div>
+      <div class="text-gray-400">© 2026 DharmaAI. Intelligence meets growth.</div>
+      <div class="flex gap-4 justify-end"><i class="fab fa-twitter"></i><i class="fab fa-linkedin"></i><i class="fab fa-github"></i></div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/919876543210?text=Hi%20DharmaAI%2C%20I'm%20interested%20in%20AI%20solutions" target="_blank" class="fixed bottom-24 right-6 z-50 bg-green-500 text-white p-3 rounded-full shadow-2xl hover:bg-green-600 transition-all flex items-center justify-center w-14 h-14"><i class="fab fa-whatsapp text-3xl"></i></a>
+
+  <!-- AI Simulated Chatbot Widget (floating) -->
+  <div id="chatWidget" class="fixed bottom-6 right-6 z-50">
+    <button id="openChatBtn" class="bg-gradient-to-r from-[#2A5298] to-[#00B4AA] text-white p-4 rounded-full shadow-xl hover:scale-105 transition"><i class="fas fa-comment-dots text-2xl"></i></button>
+    <div id="chatWindow" class="hidden absolute bottom-20 right-0 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
+      <div class="bg-gradient-to-r from-[#1E3C72] to-[#00B4AA] p-3 text-white flex justify-between items-center"><span class="font-bold"><i class="fas fa-robot mr-2"></i> DharmaAI Assistant</span><button id="closeChatBtn"><i class="fas fa-times"></i></button></div>
+      <div id="chatMessages" class="h-80 overflow-y-auto p-3 bg-gray-50 flex flex-col space-y-2"></div>
+      <div class="p-2 border-t flex gap-2 bg-white"><input type="text" id="chatInput" placeholder="Ask about AI Readiness, Avatars..." class="flex-1 border rounded-full px-3 py-2 text-sm outline-none"><button id="sendChatBtn" class="bg-teal-600 text-white px-4 rounded-full text-sm"><i class="fas fa-paper-plane"></i></button></div>
+    </div>
+  </div>
+
+  <!-- Scheduling Modal (automated scheduling simulation) -->
+  <div id="schedulingModal" class="fixed inset-0 bg-black/50 z-[60] hidden items-center justify-center">
+    <div class="bg-white rounded-2xl max-w-md w-full mx-4 p-6 shadow-2xl relative">
+      <button id="closeModalBtn" class="absolute top-3 right-4 text-gray-500 text-xl">&times;</button>
+      <h3 class="text-2xl font-bold text-gray-800 mb-2"><i class="fas fa-clock text-teal-600"></i> Schedule your AI Strategy Call</h3>
+      <p class="text-gray-500 text-sm mb-4">Pick a date & time — AI concierge will confirm instantly</p>
+      <input type="text" id="datePicker" placeholder="Select date & time" class="w-full border rounded-lg p-3 mb-4 text-gray-700" readonly>
+      <input type="text" id="visitorName" placeholder="Your name" class="w-full border rounded-lg p-3 mb-4">
+      <button id="confirmScheduleBtn" class="w-full bg-gradient-to-r from-[#1E3C72] to-[#2A5298] text-white py-3 rounded-full font-semibold">Confirm Meeting (Demo)</button>
+      <p class="text-xs text-center text-gray-400 mt-3">*Simulated scheduling — AI will follow up</p>
+    </div>
+  </div>
+
+  <script>
+    // ---------- SPA ROUTER ----------
+    const pages = {
+      home: `
+        <div class="max-w-6xl mx-auto space-y-12">
+          <!-- Hero + Mascot + AI Avatar placeholder -->
+          <div class="flex flex-col lg:flex-row items-center gap-10">
+            <div class="flex-1">
+              <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-3 py-1 rounded-full">DharmaAI 2.0</span>
+              <h1 class="text-4xl md:text-5xl font-extrabold mt-4 leading-tight">Conscious AI for <span class="gradient-text">Intelligence & Exponential Growth</span></h1>
+              <p class="text-gray-600 text-lg mt-4">AI Readiness Audits · Hyper-personalized Avatars · Lead Gen Automation — built on ethical frameworks.</p>
+              <div class="flex gap-4 mt-6"><button onclick="document.getElementById('scheduleBtnDesktop').click()" class="bg-black text-white px-6 py-3 rounded-full shadow-md font-medium flex gap-2"><i class="fas fa-chart-line"></i> Start free audit</button><button id="demoAvatarBtn" class="border border-gray-300 px-6 py-3 rounded-full font-medium"><i class="fas fa-play"></i> Meet AI Avatar</button></div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-6">
+              <!-- Mascot: Intelligence & Growth -->
+              <div class="mascot-float bg-gradient-to-br from-indigo-50 to-teal-50 p-5 rounded-3xl shadow-xl text-center w-64">
+                <div class="relative w-32 h-32 mx-auto"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="45" r="28" fill="#D9E8FF" stroke="#2A5298" stroke-width="2"/><circle cx="38" cy="40" r="3" fill="#1E3C72"/><circle cx="62" cy="40" r="3" fill="#1E3C72"/><path d="M44 54 Q50 62 56 54" stroke="#2A5298" stroke-width="2" fill="none"/><path d="M50 28 L50 35 M45 30 L55 30" stroke="#00B4AA" stroke-width="2"/><path d="M22 52 L34 58 M78 52 L66 58" stroke="#6B8C42" stroke-width="3"/><path d="M50 70 L50 80 L45 76 L55 76 L50 80" fill="#4CAF50"/></svg></div>
+                <p class="font-bold text-gray-800 mt-2">✨ DharmaBee ✨</p>
+                <p class="text-xs text-gray-500">Wisdom · Pollination of Growth</p>
+              </div>
+              <!-- AI Avatar placeholder for video greeting -->
+              <div class="avatar-glow w-full max-w-xs bg-white rounded-2xl shadow-lg p-4 border border-teal-100 text-center">
+                <div class="bg-gray-200 rounded-xl w-full h-32 flex items-center justify-center relative"><i class="fas fa-user-circle text-6xl text-teal-700 opacity-60"></i><div class="absolute inset-0 flex items-center justify-center"><i class="fas fa-play-circle text-4xl text-white drop-shadow-lg"></i></div></div>
+                <p class="font-semibold mt-3"><i class="fas fa-video text-teal-500"></i> AI Avatar: "Aanya"</p>
+                <p class="text-xs text-gray-500">Your intelligent digital twin • Video greeting (preview)</p>
+                <button id="avatarGreetBtn" class="text-teal-600 text-sm mt-2 underline">Say hello →</button>
+              </div>
+            </div>
+          </div>
+          <!-- quick USP + stats -->
+          <div class="grid md:grid-cols-3 gap-6 mt-8"><div class="bg-white p-5 rounded-xl shadow-sm border"><i class="fas fa-microchip text-3xl text-teal-600"></i><h3 class="font-bold mt-2">AI Readiness Audits</h3><p class="text-sm text-gray-500">In-depth analysis of your AI maturity & roadmap</p></div><div class="bg-white p-5 rounded-xl shadow-sm border"><i class="fas fa-chart-simple text-3xl text-teal-600"></i><h3 class="font-bold mt-2">Lead Gen Automation</h3><p class="text-sm text-gray-500">AI agents that convert 3x faster, 24/7</p></div><div class="bg-white p-5 rounded-xl shadow-sm border"><i class="fas fa-user-astronaut text-3xl text-teal-600"></i><h3 class="font-bold mt-2">Digital Avatars</h3><p class="text-sm text-gray-500">Lifelike AI presenters & sales avatars</p></div></div>
+        </div>
+      `,
+      services: `
+        <div class="max-w-5xl mx-auto"><h2 class="text-3xl md:text-4xl font-bold text-center">Core AI <span class="gradient-text">Services</span></h2><p class="text-center text-gray-500 mb-10">Future-proof your business with DharmaAI’s intelligent suite</p>
+        <div class="grid md:grid-cols-3 gap-8"><div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition"><i class="fas fa-clipboard-list text-4xl text-teal-600"></i><h3 class="text-2xl font-bold mt-3">AI Readiness Audits</h3><p class="mt-2 text-gray-600">Comprehensive audit: data infrastructure, talent, ethical alignment & ROI simulation. Get a detailed roadmap.</p><div class="mt-4 text-sm font-semibold text-teal-700">→ 360° assessment</div></div><div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition"><i class="fas fa-bullhorn text-4xl text-teal-600"></i><h3 class="text-2xl font-bold mt-3">Lead Generation Automation</h3><p class="mt-2 text-gray-600">AI-driven multi-channel outreach, hyper-personalized sequences, and intelligent CRM sync — 40% higher conversion.</p><div class="mt-4 text-sm font-semibold text-teal-700">→ AI sales agents</div></div><div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition"><i class="fas fa-robot text-4xl text-teal-600"></i><h3 class="text-2xl font-bold mt-3">Digital Avatars</h3><p class="mt-2 text-gray-600">Create your ultra-realistic AI video avatar for presentations, 24/7 customer interaction, and multilingual support.</p><div class="mt-4 text-sm font-semibold text-teal-700">→ custom voice + face synthesis</div></div></div><div class="mt-12 bg-teal-50 p-8 rounded-3xl text-center"><p class="text-xl font-bold">✨ The DharmaAI X-Factor ✨</p><p class="text-gray-700 mt-2">"Conscious AI Alignment" — every solution is embedded with ethical guardrails, cultural sensitivity & sustainability metrics. We don’t just scale business; we scale value with integrity.</p></div></div>
+      `,
+      "case-studies": `
+        <div class="max-w-5xl mx-auto"><h2 class="text-3xl md:text-4xl font-bold text-center">Success <span class="gradient-text">Stories</span></h2><p class="text-center text-gray-500 mb-10">Real impact from DharmaAI ecosystem</p>
+        <div class="grid md:grid-cols-2 gap-8"><div class="bg-white border rounded-2xl p-6"><div class="flex justify-between"><span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs">Fintech</span><i class="fas fa-chart-line text-teal-500"></i></div><h3 class="text-2xl font-bold mt-2">Nexa Bank: AI Readiness + Lead Automation</h3><p class="mt-3 text-gray-600">After DharmaAI audit, they deployed lead scoring AI that boosted cross-sell by <span class="font-bold text-teal-800">48%</span> in 3 months. 35% reduction in manual workflows.</p><p class="mt-4 text-sm font-mono">📊 Results: $2.3M additional revenue</p></div><div class="bg-white border rounded-2xl p-6"><div class="flex justify-between"><span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs">Retail/Ecomm</span><i class="fas fa-store"></i></div><h3 class="text-2xl font-bold mt-2">UrbanModa: Digital Avatar Storefront</h3><p class="mt-3 text-gray-600">Implemented an AI avatar stylist that increased average session time by 122% and conversion by 31% using conversational AI.</p><p class="mt-4 text-sm font-mono">✨ 24/7 avatar-led engagement, 12k+ queries automated</p></div></div><div class="mt-10 text-center"><i class="fas fa-medal text-4xl text-teal-500"></i><p class="font-semibold">More success stories available on request — average ROI +310% across 6 months.</p></div></div>
+      `,
+      "resource-hub": `
+        <div class="max-w-6xl mx-auto"><h2 class="text-3xl md:text-4xl font-bold text-center">AI Resource <span class="gradient-text">Hub</span></h2><p class="text-center text-gray-500 mb-8">Insights, whitepapers & tools to stay ahead in the AI revolution</p>
+        <div class="grid md:grid-cols-3 gap-6"><div class="bg-white rounded-xl shadow p-5 border-l-4 border-teal-400"><i class="fas fa-file-pdf text-red-500 text-2xl"></i><h3 class="font-bold text-lg mt-2">2026 AI Readiness Report</h3><p class="text-sm text-gray-500">Download the ultimate guide for enterprise AI adoption.</p><button class="mt-3 text-teal-600 text-sm font-semibold">Download →</button></div><div class="bg-white rounded-xl shadow p-5 border-l-4 border-teal-400"><i class="fas fa-chalkboard-user text-blue-600 text-2xl"></i><h3 class="font-bold text-lg mt-2">Webinar: Ethical Lead Gen with AI</h3><p class="text-sm text-gray-500">Watch on-demand: how to automate without losing trust.</p><button class="mt-3 text-teal-600 text-sm font-semibold">Watch now</button></div><div class="bg-white rounded-xl shadow p-5 border-l-4 border-teal-400"><i class="fas fa-cube text-purple-600 text-2xl"></i><h3 class="font-bold text-lg mt-2">Avatar Studio Playground</h3><p class="text-sm text-gray-500">Test our demo AI avatar builder (Beta). Create your own digital twin.</p><button class="mt-3 text-teal-600 text-sm font-semibold">Try demo</button></div></div><div class="mt-12 bg-gray-100 rounded-2xl p-6 flex flex-wrap gap-4 justify-between items-center"><span><i class="fas fa-newspaper"></i> Weekly AI newsletter — 8k+ subscribers</span><input placeholder="Email" class="border rounded-full px-4 py-2"><button class="bg-teal-700 text-white px-5 py-2 rounded-full">Subscribe</button></div></div>
+      `,
+      contact: `
+        <div class="max-w-4xl mx-auto"><div class="text-center"><h2 class="text-4xl font-bold">Let’s co-create <span class="gradient-text">the future</span></h2><p class="text-gray-500 mt-2">Ready to accelerate with DharmaAI? Talk to our team.</p></div>
+        <div class="mt-10 bg-white shadow-lg rounded-2xl p-8"><form id="contactFormMock"><div class="grid md:grid-cols-2 gap-6"><input type="text" placeholder="Full name" class="border p-3 rounded-lg"><input type="email" placeholder="Email address" class="border p-3 rounded-lg"><input type="text" placeholder="Company" class="border p-3 rounded-lg"><select class="border p-3 rounded-lg"><option>AI Readiness Audit</option><option>Lead Gen Automation</option><option>Digital Avatars</option></select></div><textarea rows="3" placeholder="Your vision with AI..." class="border p-3 rounded-lg w-full mt-4"></textarea><button type="button" id="mockContactBtn" class="mt-5 bg-gradient-to-r from-[#1E3C72] to-[#2A5298] text-white w-full py-3 rounded-full font-bold">Send message →</button></form><p class="text-xs text-center text-gray-400 mt-4">We reply within 24h + schedule AI consult instantly</p></div><div class="mt-6 flex justify-center gap-8 text-center"><div><i class="fas fa-phone-alt text-teal-500 text-2xl"></i><p>+91 80 1234 5678</p></div><div><i class="fas fa-envelope text-teal-500 text-2xl"></i><p>hello@dharmaai.com</p></div></div></div>
+      `
+    };
+
+    let currentPage = "home";
+    function renderPage(pageId) {
+      if (!pages[pageId]) pageId = "home";
+      document.getElementById("appContent").innerHTML = pages[pageId];
+      currentPage = pageId;
+      updateActiveNav();
+      attachPageSpecificEvents();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateActiveNav() {
+      document.querySelectorAll(".nav-link, .nav-link-mobile").forEach(link => {
+        const linkPage = link.getAttribute("data-page");
+        if (linkPage === currentPage) {
+          link.classList.add("active-nav", "font-bold", "text-teal-700");
+          if (!link.classList.contains("active-nav")) link.style.borderBottom = "3px solid #00B4AA";
+        } else {
+          link.classList.remove("active-nav", "font-bold", "text-teal-700");
+          link.style.borderBottom = "none";
+        }
+      });
+    }
+
+    function attachPageSpecificEvents() {
+      // Avatar greeting simulation alert + AI avatar placeholder greeting
+      const avatarBtn = document.getElementById("avatarGreetBtn");
+      if (avatarBtn) avatarBtn.onclick = () => alert("🎥 AI Avatar 'Aanya' says: Namaste! I'm your intelligent interface — ask me anything about DharmaAI's growth ecosystem.");
+      const demoAvatarBtn = document.getElementById("demoAvatarBtn");
+      if (demoAvatarBtn) demoAvatarBtn.onclick = () => alert("✨ Experience our Digital Avatar demo: lifelike, multilingual & trained on your brand voice. Book a full demo via scheduling.");
+      const mockContactBtn = document.getElementById("mockContactBtn");
+      if (mockContactBtn) mockContactBtn.onclick = () => alert("Thank you! A DharmaAI specialist will respond within 12 hours.");
+      // Resource hub buttons mock
+      document.querySelectorAll("#resource-hub button").forEach(btn => btn.addEventListener("click", () => alert("🔮 Full resource access available after scheduling a consult!")))
+    }
+
+    // navigation & routing
+    function navigateTo(page) { renderPage(page); history.pushState({ page }, "", `#${page}`); }
+
+    window.addEventListener("popstate", (e) => { const page = location.hash.slice(1) || "home"; renderPage(page); });
+    document.querySelectorAll(".nav-link, .nav-link-mobile").forEach(link => {
+      link.addEventListener("click", (e) => { e.preventDefault(); const page = link.getAttribute("data-page"); if (page) navigateTo(page); });
+    });
+    if (location.hash) renderPage(location.hash.slice(1)); else renderPage("home");
+
+    // ---------- CHATBOT SIMULATION ----------
+    const chatWindow = document.getElementById("chatWindow");
+    const openChatBtn = document.getElementById("openChatBtn");
+    const closeChatBtn = document.getElementById("closeChatBtn");
+    const chatInput = document.getElementById("chatInput");
+    const sendChatBtn = document.getElementById("sendChatBtn");
+    const chatMessages = document.getElementById("chatMessages");
+
+    function addBotMessage(msg) {
+      const div = document.createElement("div");
+      div.className = "bg-teal-100 text-gray-800 rounded-2xl p-2 max-w-[80%] self-start text-sm my-1";
+      div.innerHTML = `<i class="fas fa-robot text-teal-700 mr-1"></i> ${msg}`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    function addUserMessage(msg) {
+      const div = document.createElement("div");
+      div.className = "bg-gray-200 text-gray-800 rounded-2xl p-2 max-w-[80%] self-end text-sm my-1";
+      div.innerHTML = `<i class="fas fa-user mr-1"></i> ${msg}`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    function processAIResponse(userMsg) {
+      let reply = "I'm your DharmaAI assistant. Would you like to explore AI Readiness Audits, Lead Gen Automation, or Digital Avatars?";
+      if (userMsg.toLowerCase().includes("audit") || userMsg.toLowerCase().includes("readiness")) reply = "Our AI Readiness Audit evaluates your data, infrastructure, and ethics alignment. Want to schedule a free assessment? Click the schedule button!";
+      else if (userMsg.toLowerCase().includes("lead") || userMsg.toLowerCase().includes("generation")) reply = "Lead Generation Automation: AI agents that nurture, score, and convert. We've seen 3X increase in SQLs. Want a demo?";
+      else if (userMsg.toLowerCase().includes("avatar") || userMsg.toLowerCase().includes("video")) reply = "Digital Avatars: Create lifelike AI presenters, sales agents, and support avatars in minutes. You can see a sample on our homepage!";
+      else if (userMsg.toLowerCase().includes("hello") || userMsg.toLowerCase().includes("hi")) reply = "Hello! Ready to supercharge your business with AI? Let me know which service you’re curious about!";
+      else if (userMsg.toLowerCase().includes("price") || userMsg.toLowerCase().includes("cost")) reply = "Pricing varies per module. Book a 15-min AI strategy call to get a custom quote. Use the Schedule button!";
+      setTimeout(() => addBotMessage(reply), 300);
+    }
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      addUserMessage(text);
+      chatInput.value = "";
+      processAIResponse(text);
+    }
+    openChatBtn.onclick = () => { chatWindow.classList.toggle("hidden"); if (!chatWindow.classList.contains("hidden") && chatMessages.children.length === 0) addBotMessage("Namaste! I'm DharmaAI's virtual consultant. Ask me about AI Readiness, Lead Automation, or Digital Avatars 👋"); };
+    closeChatBtn.onclick = () => chatWindow.classList.add("hidden");
+    sendChatBtn.onclick = sendMessage;
+    chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+
+    // ---------- SCHEDULING MODAL (automated scheduling simulation) ----------
+    const modal = document.getElementById("schedulingModal");
+    const scheduleBtns = [document.getElementById("scheduleBtnDesktop"), document.getElementById("scheduleBtnMobile")];
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const confirmSchedule = document.getElementById("confirmScheduleBtn");
+    const datePickerInput = document.getElementById("datePicker");
+    flatpickr(datePickerInput, { enableTime: true, dateFormat: "Y-m-d H:i", minDate: "today", time_24hr: true, defaultHour: 10 });
+    function openModal() { modal.classList.remove("hidden"); modal.classList.add("flex"); }
+    scheduleBtns.forEach(btn => { if (btn) btn.onclick = (e) => { e.preventDefault(); openModal(); }; });
+    closeModalBtn.onclick = () => modal.classList.add("hidden");
+    confirmSchedule.onclick = () => {
+      const datetime = datePickerInput.value;
+      const name = document.getElementById("visitorName").value.trim() || "Guest";
+      if (!datetime) { alert("Please select a date & time for your AI strategy session."); return; }
+      alert(`✅ ${name}, your AI consultation is scheduled for ${datetime}. A calendar invite + AI avatar reminder will be sent.`);
+      modal.classList.add("hidden");
+      datePickerInput.value = "";
+      document.getElementById("visitorName").value = "";
+    };
+    // close modal when backdrop clicked
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.add("hidden"); });
+    // Mobile menu toggle
+    document.getElementById("mobileMenuBtn").onclick = () => { const menu = document.getElementById("mobileMenu"); menu.classList.toggle("hidden"); };
+    // Bonus X-Factor mention: show on services page already but add console log for AI tools usage
+    console.log("🚀 Built with ChatGPT, Midjourney for mascot ideation, TailwindCSS — 10x faster workflow");
+
+    // Re-attach scheduling triggers after page renders (generic)
+    document.body.addEventListener("click", (e) => {
+      if (e.target.id === "scheduleBtnDesktop" || e.target.closest("#scheduleBtnDesktop")) openModal();
+      if (e.target.id === "scheduleBtnMobile" || e.target.closest("#scheduleBtnMobile")) openModal();
+    });
+  </script>
+  <script>
+    // final re-run for avatar events after each render - using mutationobserver simple
+    const observer = new MutationObserver(() => { attachPageSpecificEvents(); });
+    observer.observe(document.getElementById("appContent"), { childList: true, subtree: true });
+    function attachPageSpecificEvents() {
+      document.querySelectorAll("#avatarGreetBtn, #demoAvatarBtn, #mockContactBtn, #resource-hub button").forEach(el => {
+        if (el.id === "avatarGreetBtn") el.onclick = () => alert("🎥 AI Avatar 'Aanya' says: Namaste! I'm your intelligent interface — ask me anything about DharmaAI's growth ecosystem.");
+        if (el.id === "demoAvatarBtn") el.onclick = () => alert("✨ Experience our Digital Avatar demo: lifelike, multilingual & trained on your brand voice. Book a full demo via scheduling.");
+        if (el.id === "mockContactBtn") el.onclick = () => alert("Thank you! A DharmaAI specialist will respond within 12 hours.");
+      });
+      document.querySelectorAll("#resource-hub button").forEach(btn => btn && btn.addEventListener("click", () => alert("🔮 Full resource access available after scheduling a consult!")));
+    }
+  </script>
+</body>
+</html>
